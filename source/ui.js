@@ -52,6 +52,8 @@ const printCommitLog = async (repoUrl, registryUrl) => {
 
 const checkIgnoredFiles = async pkg => {
 	const ignoredFiles = await util.getNewAndUnpublishedFiles(pkg);
+	console.log('found ignored files');
+	console.log(ignoredFiles);
 	if (!ignoredFiles || ignoredFiles.length === 0) {
 		return true;
 	}
@@ -63,6 +65,7 @@ const checkIgnoredFiles = async pkg => {
 		default: false
 	}]);
 
+	console.log(`confirmed prompt (ignored files) ${answers.confirm}`);
 	return answers.confirm;
 };
 
@@ -73,6 +76,10 @@ module.exports = async (options, pkg) => {
 	const pkgManager = options.yarn ? 'yarn' : 'npm';
 	const registryUrl = await getRegistryUrl(pkgManager, pkg);
 
+	console.log('Start ui. options:\n');
+	console.log(options);
+	console.log(`stdin connected ${process.stdin.isTTY}`);
+	console.log(`stdout connected ${process.stdout.isTTY}`);
 	if (options.runPublish) {
 		checkIgnoreStrategy(pkg);
 
